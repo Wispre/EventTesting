@@ -19,6 +19,15 @@ public class SoundQueue : MonoBehaviour
 
     public void PlaySound(PlayMessage message)
     {
+        for(int i = head; i != tail; i = (i + 1) % MAX_PENDING)
+        {
+            if (pending[i].SoundID == message.SoundID)
+            {
+                pending[i].Volume = Mathf.Max(message.Volume, pending[i].Volume);
+                return;
+            }
+        }
+
         if (tail < MAX_PENDING)
         {
             if((tail + 1) % MAX_PENDING != head)
@@ -27,6 +36,7 @@ public class SoundQueue : MonoBehaviour
                 tail = (tail + 1) % MAX_PENDING;
             }
         }
+
     }
 
     private void Update()
